@@ -6,7 +6,7 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 14:06:46 by lfournie          #+#    #+#             */
-/*   Updated: 2026/02/11 11:59:18 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/04/17 13:23:21 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ class Array
 	public:
 		Array( void );
 		Array( unsigned int n);
-		Array( Array &copy );
-		Array &operator=( Array &copy );
+		Array( const Array &copy );
+		Array &operator=( const Array &copy );
 		Element &operator[](unsigned int i);
 		~Array();
 	//GETTERS

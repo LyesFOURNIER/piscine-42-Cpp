@@ -6,7 +6,7 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 08:38:11 by lfournie          #+#    #+#             */
-/*   Updated: 2026/02/10 10:40:39 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/04/17 10:13:47 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int	main()
 	Base *base = generate();
 	identify(base);
 	identify(*base);
-	delete(base);
+	if (base)
+		delete(base);
 	return (0);
 }

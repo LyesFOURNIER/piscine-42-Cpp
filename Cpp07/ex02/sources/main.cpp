@@ -6,12 +6,11 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 10:49:45 by lfournie          #+#    #+#             */
-/*   Updated: 2026/02/11 11:19:08 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/04/17 13:19:31 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lib.hpp"
-
 int main(int, char**)
 {
     Array<int> numbers(MAX_VAL);
@@ -28,7 +27,6 @@ int main(int, char**)
         Array<int> tmp = numbers;
         Array<int> test(tmp);
     }
-
     for (int i = 0; i < MAX_VAL; i++)
     {
         if (mirror[i] != numbers[i])
@@ -53,7 +51,6 @@ int main(int, char**)
     {
         std::cerr << e.what() << '\n';
     }
-
     for (int i = 0; i < MAX_VAL; i++)
     {
         numbers[i] = rand();

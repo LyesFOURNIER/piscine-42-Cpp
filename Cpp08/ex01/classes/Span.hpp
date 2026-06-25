@@ -6,7 +6,7 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 10:59:32 by lfournie          #+#    #+#             */
-/*   Updated: 2026/02/16 09:53:53 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/04/28 11:15:23 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,20 @@ class Span
 		//
 		//MEMBERS FUNCTIONS
 			void	addNumber( int n );
-			int		shortestSpan( void );
-			int		longestSpan( void );
+			int		shortestSpan( void ) const;
+			int		longestSpan( void ) const;
+			template <typename Iterator>
+        	void addRange(Iterator start, Iterator end)
+        	{
+				int i = 0;
+            	for (Iterator it = start; it != end; ++it)
+            	{
+                	if (!_remaining)
+                	    throw ArrayFullException();
+                	_array[i++] = *it;
+					_remaining--;
+            	}
+        	}
 		//
 		//EXCEPTIONS
 		class ArrayFullException : public std::exception
@@ -49,8 +61,8 @@ class Span
 		private:
 		
 		int	*_array;
-		int	_size;
-		int	_remaining;
+		unsigned int	_size;
+		unsigned int	_remaining;
 };
 
 #endif

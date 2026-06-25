@@ -6,7 +6,7 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/12 11:30:52 by lfournie          #+#    #+#             */
-/*   Updated: 2026/02/16 09:52:48 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/04/28 11:36:47 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ Span::Span( unsigned int N ) : _size(N)
 				<< _size
 				<< std::endl;
 	_array = new int[_size];
+	for (unsigned int i = 0; i < _size; i++)
+	{
+		_array[i] = 0;
+	}
 	_remaining = _size;
 	return;
 }
@@ -39,7 +43,7 @@ Span::Span( const Span &copy ) : _size(copy.getSize())
 	_remaining = copy._remaining;
 	if (_size > 0)
 	{
-		for(int i = 0; i < _size; i++)
+		for(unsigned int i = 0; i < _size; i++)
 		{
 			_array[i] = copy._array[i];
 		}
@@ -57,7 +61,7 @@ Span &Span::operator=( const Span &copy )
 	_remaining = copy._remaining;
 	if (_size > 0)
 	{
-		for(int i = 0; i < _size; i++)
+		for(unsigned int i = 0; i < _size; i++)
 		{
 			_array[i] = copy._array[i];
 		}
@@ -75,26 +79,29 @@ void	Span::addNumber( int n )
 	if (!_remaining)
 		throw ArrayFullException();
 	_array[_size - _remaining] = n;
-	std::cout	<< "Number successfuly added in array at index "
+	std::cout	<< "Interger of value: "
+				<< n
+				<< " successfuly added in array at index "
 				<< _size - _remaining
 				<< std::endl;
 	_remaining--;
 	return;
 }
 
-int		Span::shortestSpan( void )
+int		Span::shortestSpan( void ) const
 {
+	if (_size < 2 || _size - _remaining < 2)
+		throw NoSpanPossibleException();
+	
 	std::vector<int> tmp;
 	
-	if (_size < 2)
-		throw NoSpanPossibleException();
-	for (int i = 0; i <_size; i++)
+	for (unsigned int i = 0; i <_size; i++)
 	{
 		tmp.push_back(_array[i]);
 	}
 	sort(tmp.begin(), tmp.end());
 	int res = tmp[1] - tmp[0];
-	for (int i = 1; i < _size - 1; i++)
+	for (unsigned int i = 1; i < _size - 1; i++)
 	{
 		if ((tmp[i + 1] - tmp[i]) < res)
 			res = tmp[i + 1] - tmp[i];
@@ -102,13 +109,14 @@ int		Span::shortestSpan( void )
 	return (res);
 }
 
-int		Span::longestSpan( void )
+int		Span::longestSpan( void ) const
 {
+	if (_size < 2 || _size - _remaining < 2)
+		throw NoSpanPossibleException();
+	
 	std::vector<int> tmp;
 	
-	if (_size < 2)
-		throw NoSpanPossibleException();
-	for (int i = 0; i <_size; i++)
+	for (unsigned int i = 0; i <_size; i++)
 	{
 		tmp.push_back(_array[i]);
 	}

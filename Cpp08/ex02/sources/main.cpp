@@ -6,11 +6,12 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 10:49:45 by lfournie          #+#    #+#             */
-/*   Updated: 2026/02/16 13:09:33 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/05/18 11:24:50 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/lib.hpp"
+#include <list>
 
 int main()
 {
@@ -42,5 +43,33 @@ int main()
 		++it;
 	}
 	std::stack<int> s(mstack);
+	
+	std::list<int> stack;
+	
+	stack.push_back(5);
+	stack.push_back(17);
+	
+	std::cout << stack.back() << std::endl;
+	
+	stack.pop_back();
+	
+	std::cout << stack.size() << std::endl;
+	
+	stack.push_back(3);
+	stack.push_back(5);
+	stack.push_back(737);
+	//[...]
+	stack.push_back(0);
+	
+	std::list<int>::iterator it2 = stack.begin();
+	std::list<int>::iterator ite2 = stack.end();
+	
+	++it2;
+	--it2;
+	while (it2 != ite2)
+	{
+		std::cout << *it2 << std::endl;
+		++it2;
+	}
 	return 0;
 }

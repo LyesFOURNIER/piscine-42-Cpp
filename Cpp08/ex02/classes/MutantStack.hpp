@@ -6,7 +6,7 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 09:55:01 by lfournie          #+#    #+#             */
-/*   Updated: 2026/02/16 13:23:30 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/04/27 10:44:04 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 # include "../includes/lib.hpp"
 
 template <typename T, class container=std::deque<T> >
-class MutantStack : public std::stack<T>
+class MutantStack : public std::stack<T, container>
 {
 	public :
 	

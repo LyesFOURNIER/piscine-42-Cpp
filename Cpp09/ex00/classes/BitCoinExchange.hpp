@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lib.hpp                                            :+:      :+:    :+:   */
+/*   BitCoinExchange.hpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/10 10:48:51 by lfournie          #+#    #+#             */
-/*   Updated: 2026/06/22 10:41:50 by lfournie         ###   ########.fr       */
+/*   Created: 2026/06/18 10:02:14 by lfournie          #+#    #+#             */
+/*   Updated: 2026/06/25 11:17:55 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIB_HPP
-# define LIB_HPP
+#pragma once
 
-# include <iostream>
-# include <fstream>
-# include <sstream>
-# include <string>
-# include <cstdlib>
-# include <map>
-# include "../classes/BitCoinExchange.hpp"
+#include "../includes/lib.hpp"
 
-#endif
+class	BitCoinExchange
+{
+	public:
+	
+	BitCoinExchange(void);
+	BitCoinExchange(const BitCoinExchange &);
+	BitCoinExchange &operator=(const BitCoinExchange &);
+	~BitCoinExchange();
+
+	void	parseInput(const char *);
+	
+	private:
+	
+	std::map<std::string, float> _db;
+	
+};
