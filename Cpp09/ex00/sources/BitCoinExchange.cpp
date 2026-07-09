@@ -6,7 +6,7 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 10:02:50 by lfournie          #+#    #+#             */
-/*   Updated: 2026/06/25 14:59:43 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/06/30 11:17:23 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ BitCoinExchange::BitCoinExchange(void)
 	// {
 	//     std::cout << it->first << " " << it->second << "\n";
 	// }
-	std::cout << "BitCoinExchange default constructor called" << std::endl;
+	// std::cout << "BitCoinExchange default constructor called" << std::endl;
 	return;
 }
 
@@ -67,7 +67,7 @@ BitCoinExchange::BitCoinExchange(const BitCoinExchange &copy)
 			_db.insert(std::pair<std::string, float>(it->first, it->second));
 		}
 	}
-	std::cout << "BitCoinExchange copy constructor called" << std::endl;
+	// std::cout << "BitCoinExchange copy constructor called" << std::endl;
 	return;
 }
 
@@ -81,7 +81,7 @@ BitCoinExchange &BitCoinExchange::operator=(const BitCoinExchange &copy)
 			_db.insert(std::pair<std::string, float>(it->first, it->second));
 		}
 	}
-	std::cout << "BitCoinExchange assigment operator called" << std::endl;
+	// std::cout << "BitCoinExchange assigment operator called" << std::endl;
 	return *this;
 }
 
@@ -193,7 +193,7 @@ void	BitCoinExchange::parseInput(const char *path)
 		value.clear();
 		if (buf.find('|') == std::string::npos || (buf.length() < 10 && !is_first_line))
 		{
-			std::cout << "Error: invalid format; valid format is: date | value" << std::endl;
+			std::cout << "Error: invalid format" << std::endl;
 			if (is_first_line)
 				is_first_line = false;
 			continue;
@@ -212,7 +212,7 @@ void	BitCoinExchange::parseInput(const char *path)
 			}
 			if (!key_format_check(key))
 			{
-				std::cout << "Error: invalid date => " << key << "; valid date format is Year-Month-Day"<< std::endl;
+				std::cout << "Error: invalid date => " << key << std::endl;
 				continue;
 			}
 			i++;
@@ -223,7 +223,7 @@ void	BitCoinExchange::parseInput(const char *path)
 			}
 			if (!value_format_check(value))
 			{
-				std::cout << "Error: invalid value; valid value format is a float between 0 and 1000" << std::endl;
+				std::cout << "Error: invalid value" << std::endl;
 				continue;
 			}
 			it = _db.lower_bound(key);
@@ -232,7 +232,7 @@ void	BitCoinExchange::parseInput(const char *path)
 			{
 			    if (it == _db.begin())
 			    {
-			        std::cout << "Error: no earlier date found" << std::endl;
+			        std::cout << "Error: earliest valid database date is => " << it->first << std::endl;
 			        continue;
 			    }
 			    --it;
@@ -245,6 +245,6 @@ void	BitCoinExchange::parseInput(const char *path)
 
 BitCoinExchange::~BitCoinExchange(void)
 {
-	std::cout << "BitCoinExchange destructor called" << std::endl;
+	// std::cout << "BitCoinExchange destructor called" << std::endl;
 	return;
 }

@@ -6,7 +6,7 @@
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/10 10:48:51 by lfournie          #+#    #+#             */
-/*   Updated: 2026/03/09 10:20:46 by lfournie         ###   ########.fr       */
+/*   Updated: 2026/06/30 11:44:25 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,7 @@
 # define LIB_HPP
 
 # include <iostream>
+# include <list>
+# include "../classes/RPN.hpp"
 
 #endif

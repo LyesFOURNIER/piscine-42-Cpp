@@ -6,7 +6,7 @@
 #    By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/10/27 12:37:31 by lfournie          #+#    #+#              #
-#    Updated: 2026/03/09 10:26:53 by lfournie         ###   ########.fr        #
+#    Updated: 2026/07/07 14:36:18 by lfournie         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ OBJ_DIR = objects
 INC_DIR = includes
 CLSS_DIR = classes
 
-FILES = main.cpp  \
+FILES = main.cpp PmergeMe.cpp \
 
 SRC = $(addprefix $(SRC_DIR)/, $(FILES))
 OBJ = $(addprefix $(OBJ_DIR)/, $(FILES:.cpp=.o))

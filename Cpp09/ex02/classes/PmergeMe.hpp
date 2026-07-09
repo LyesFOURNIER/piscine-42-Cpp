@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lib.hpp                                            :+:      :+:    :+:   */
+/*   PmergeMe.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lfournie <lfournie@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/10 10:48:51 by lfournie          #+#    #+#             */
-/*   Updated: 2026/07/07 16:17:49 by lfournie         ###   ########.fr       */
+/*   Created: 2026/07/07 10:43:15 by lfournie          #+#    #+#             */
+/*   Updated: 2026/07/09 14:49:04 by lfournie         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIB_HPP
-# define LIB_HPP
+#pragma once
 
-# include <iostream>
-# include "vector"
-# include "deque"
-# include <cstdlib>
-# include <cstring>
-# include "../classes/PmergeMe.hpp"
+#include "../includes/lib.hpp"
 
+class	PmergeMe
+{
+	public:
+	
+	PmergeMe( void );
+	PmergeMe( std::string );
+	PmergeMe( const PmergeMe & );
+	PmergeMe &operator=( const PmergeMe & );
+	~PmergeMe( void );
 
-#endif
+	void	vectSort(std::vector<int>&);
+	void	dequeSort(std::vector<int>&);
+
+	private:
+	
+	std::vector<int> _seq;
+};
