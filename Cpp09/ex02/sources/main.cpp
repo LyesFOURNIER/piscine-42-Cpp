@@ -75,6 +75,7 @@ int main(int ac, char **av)
 	if (!isInputValid(av))
 		return 1;
 	PmergeMe seq(convertInput(av));
+	seq.vectSort();
 	
 	return 0;
 }

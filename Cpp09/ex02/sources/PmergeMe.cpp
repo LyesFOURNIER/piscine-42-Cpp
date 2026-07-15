@@ -12,8 +12,8 @@
 
 #include "../includes/lib.hpp"
 
-void	vectorMerge(std::vector<int>&, size_t);
-void	dequeMerge(std::vector<int>&, size_t);
+void	vectorMerge(std::vector<int>*, size_t*);
+void	dequeMerge(std::deque<int>*, size_t*);
 
 PmergeMe::PmergeMe( void )
 {
@@ -52,20 +52,65 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 	return *this;
 }
 
-void	vectorMerge(std::vector<int> &v, size_t order)
+void	vectorMerge(std::vector<int> *v, size_t *order)
 {
+	int	tmp;
+
+	std::cout 	<< "order = " << *order
+				<< "\nv->size() / 2 = " << v->size() / 2 << std::endl;
+	if (*order >= v->size() / 2)
+		return;
+
+	for (size_t groups = 1; groups <  v->size() / *order; groups += 2)
+	{
+		std::cout << "\ngroups = [ " << groups << " ]\n";
+		if ((*v)[*order * groups - 1] > (*v)[*order * (groups + 1) - 1])
+		{
+			std::cout	<< "left group last elem: " << (*v)[*order * groups - 1]
+						<< "\nright group last elem: " << (*v)[*order * (groups + 1) - 1]
+						<< std::endl;
+			for (size_t i = *order * groups - *order; i < *order * groups; i++)
+			{
+				tmp = (*v)[i];
+				std::cout	<< "\ntmp = " << tmp
+							<< "\n(*v)[i] before change = " << (*v)[i];
+				(*v)[i] = (*v)[i + *order];
+				std::cout	<< "\n(*v)[i] after change = " << (*v)[i]
+							<< "\n(*v)[i + *order] before change = " << (*v)[i + *order];
+				(*v)[i + *order] = tmp;
+				std::cout << "\n(*v)[i + *order] after change = " << (*v)[i + *order];
+			}
+		}
+	}
+	std::cout << std::endl;
+	*order *= 2;
+	for (std::vector<int>::iterator it = v->begin(); it != v->end(); it++)
+	{
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+	vectorMerge(v, order);
+}
+	
+void	PmergeMe::vectSort()
+{
+	std::vector<int>	v = _seq;
+	size_t				order = 1;
+	
+	for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+
+	vectorMerge(&v, &order);
 	
 }
 
-void	PmergeMe::vectSort(std::vector<int> &v)
+void	dequeMerge(std::vector<int> *d, size_t *order)
 {
-	(void)v;
-	
-}
-
-void	dequeMerge(std::vector<int> &d, size_t order)
-{
-	
+	(void)d;
+	(void)order;
 }
 
 void	PmergeMe::dequeSort(std::vector<int> &d)

@@ -24,7 +24,7 @@ class	PmergeMe
 	PmergeMe &operator=( const PmergeMe & );
 	~PmergeMe( void );
 
-	void	vectSort(std::vector<int>&);
+	void	vectSort();
 	void	dequeSort(std::vector<int>&);
 
 	private:
