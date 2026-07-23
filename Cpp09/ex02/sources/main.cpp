@@ -64,7 +64,6 @@ std::string	convertInput(char **input)
 	return ret;
 }
 
-//containers to use: vector and deque
 int main(int ac, char **av)
 {
 	if (ac < 2)
