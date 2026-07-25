@@ -12,8 +12,14 @@
 
 #include "../includes/lib.hpp"
 
+bool	groupCompare(const t_group &a, const t_group &b);
 void	vectorMerge(std::vector<int>*, size_t*);
-void	vectorCreateMainAndPending(std::vector<int>&, std::vector<int>&, std::vector<int>&, std::vector<int>&, size_t);
+void	vectorAnalyze(t_info&, std::vector<int>&, size_t);
+void	vectorBuildChains(s_state<std::vector<t_group>, std::vector<int> >&, std::vector<int>&);
+void	vectorGenerateInsertionOrder(s_state<std::vector<t_group>, std::vector<int> >&);
+// void	vectorCreateMainAndPending(std::vector<t_group>&, std::vector<t_group>&, std::vector<int>&, std::vector<int>&, size_t);
+void	vectorInsertPendingIntoMain(s_state<std::vector<t_group>, std::vector<int> >&);
+void	vectorRebuildSequence(s_state<std::vector<t_group>, std::vector<int> >&, std::vector<int>&);
 void	vectorInsert(std::vector<int>&, size_t);
 void	dequeMerge(std::deque<int>*, size_t*);
 
@@ -36,8 +42,8 @@ PmergeMe::PmergeMe(std::string input)
 		}
 		if (!tmp.empty())
 			_seq.push_back(atoi(tmp.c_str()));
-	}
-	
+		}
+		
 	return;
 }
 
@@ -49,9 +55,14 @@ PmergeMe::PmergeMe(const PmergeMe &copy) : _seq(copy._seq)
 PmergeMe &PmergeMe::operator=(const PmergeMe &copy)
 {
 	if (_seq != copy._seq)
-		_seq = copy._seq;
-		
+	_seq = copy._seq;
+	
 	return *this;
+}
+
+bool	groupCompare(const t_group &a, const t_group &b)
+{
+	return a.groupRep < b.groupRep;
 }
 
 void	vectorMerge(std::vector<int> *v, size_t *order)
@@ -85,60 +96,171 @@ void	vectorMerge(std::vector<int> *v, size_t *order)
 	vectorMerge(v, order);
 }
 
-void	vectorCreateMainAndPending(std::vector<int> &main, std::vector<int> &pending, std::vector<int> &remnant, std::vector<int> &v, size_t order)
+void	vectorAnalyze(t_info &info, std::vector<int> &v, size_t order)
 {
-	size_t groupCount = v.size() / order, remnantStart = groupCount * order;
+	info.order = order;
+	info.groupCount = v.size() / info.order;
+    info.pairCount = info.groupCount / 2;
+    info.remnantStart = info.groupCount * info.order;
+    info.hasOddGroup = (info.groupCount % 2 != 0);
+}
 
-	// first group
-	main.push_back(v[order - 1]);
-	// second group
-	main.push_back(v[order + order - 1]);
-	// remaining groups
-	std::cout << "G1 -> main (" << v[order - 1] << ")\nG2 -> main (" << v[order + order - 1] << ")" << std::endl;
-	bool toPending = true;
-	for (size_t group = 2; group < groupCount; group++)
+void	vectorBuildChains(s_state<std::vector<t_group>, std::vector<int> > &state, std::vector<int> &v)
+{
+	for (size_t pair = 0; pair < state.info.pairCount; pair++)
 	{
-	    if (toPending)
+		t_group b;
+		t_group a;
+		b.start = (pair * 2) * state.info.order;
+    	b.groupRep = v[b.start + state.info.order - 1];
+    	a.start = (pair * 2 + 1) * state.info.order;
+    	a.groupRep = v[a.start + state.info.order - 1];
+		if (pair == 0)
 		{
-			pending.push_back(v[group * order + order - 1]);
-			std::cout << "G" << group + 1 << " -> pending (" << v[group * order + order - 1] << ")";
+			state.main.push_back(b);
+			state.main.push_back(a);
 		}
-	    else
+		else
 		{
-	        main.push_back(v[group * order + order - 1]);
-			std::cout << "G" << group + 1 << " -> main (" << v[group * order + order - 1] << ")";
+			state.pending.push_back(b);
+			state.main.push_back(a);
 		}
-		std::cout << std::endl;
-	    toPending = !toPending;
 	}
-	for (size_t i = remnantStart; i < v.size(); i++)
-		remnant.push_back(v[i]);
+	if (state.info.hasOddGroup)
+	{
+		state.oddGroup.start = (state.info.pairCount * 2) * state.info.order;
+		state.oddGroup.groupRep = v[state.oddGroup.start + state.info.order - 1];
+	}
+	for (size_t i = state.info.remnantStart; i < v.size(); i++)
+		state.remnant.push_back(v[i]);
+}
+
+// void	vectorCreateMainAndPending(std::vector<t_group> &main, std::vector<t_group> &pending, std::vector<int> &remnant, std::vector<int> &v, size_t order)
+// {
+// 	size_t groupCount = v.size() / order, remnantStart = groupCount * order;
+
+// 	bool toPending = true;
+// 	for (size_t group = 0; group < groupCount; group++)
+// 	{
+// 		t_group current;
+// 		current.start = group * order;
+// 		current.groupRep = v[current.start + order - 1];
+// 		if (group < 2)
+// 		{
+// 			main.push_back(current);
+// 			// std::cout << "G" << group + 1 << " -> main [" << "start = " << current.start << ", rep = " << current.groupRep << "]" << std::endl;
+// 			continue;
+// 		}
+// 	    if (toPending)
+// 		{
+// 			pending.push_back(current);
+// 			// std::cout << "G" << group + 1 << " -> pending [" << "start = " << current.start << ", rep = " << current.groupRep << "]";
+// 		}
+// 	    else
+// 		{
+// 	        main.push_back(current);
+// 			// std::cout << "G" << group + 1 << " -> main [" << "start = " << current.start << ", rep = " << current.groupRep << "]";
+// 		}
+// 		// std::cout << std::endl;
+// 	    toPending = !toPending;
+// 	}
+// 	for (size_t i = remnantStart; i < v.size(); i++)
+// 		remnant.push_back(v[i]);
+// }
+
+void	vectorGenerateInsertionOrder(s_state<std::vector<t_group>, std::vector<int> > &state)
+{
+	
+}
+
+void	vectorInsertPendingIntoMain(s_state<std::vector<t_group>, std::vector<int> > &state)
+{
+	for (size_t i = 0; i < state.pending.size(); i++)
+	{
+		state.main.insert(std::upper_bound(state.main.begin(), state.main.end(), state.pending[i], groupCompare), state.pending[i]);
+	}
+}
+
+void	vectorRebuildSequence(s_state<std::vector<t_group>, std::vector<int> > &state, std::vector<int> &v)
+{
+	std::vector<int> rebuilt;
+
+	for (size_t i = 0; i < state.main.size(); i++)
+	{
+		for (size_t j = state.main[i].start; j < state.main[i].start + state.info.order; j++)
+		{
+			rebuilt.push_back(v[j]);
+		}
+	}
+	rebuilt.insert(rebuilt.end(), state.remnant.begin(), state.remnant.end());
+	v.swap(rebuilt);
 }
 
 void	vectorInsert(std::vector<int> &v, size_t order)
 {
-	std::vector<int> main, pending, remnant;
+	s_state<std::vector<t_group>, std::vector<int> > state;
+	// std::vector<t_group> main, pending;
+	// std::vector<int> remnant;
 
-	vectorCreateMainAndPending(main, pending, remnant, v, order);
+	if (order < 1)
+		return;
+	vectorAnalyze(state.info, v, order);
+	vectorBuildChains(state, v);
 	std::cout << "main: ";
-	for (std::vector<int>::iterator it = main.begin(); it != main.end(); it++)
+	for (size_t i = 0; i < state.main.size(); i++)
 	{
- 		std::cout << *it << " ";
+ 		std::cout << state.main[i].groupRep << " ";
  	}
  	std::cout << std::endl;
 	std::cout << "pending: ";
-	for (std::vector<int>::iterator it = pending.begin(); it != pending.end(); it++)
+	for (size_t i = 0; i < state.pending.size(); i++)
 	{
- 		std::cout << *it << " ";
+ 		std::cout << state.pending[i].groupRep << " ";
  	}
  	std::cout << std::endl;
+	if (state.info.hasOddGroup)
+		std::cout << "odd: " << state.oddGroup.groupRep << std::endl;
 	std::cout << "remnant: ";
-	for (std::vector<int>::iterator it = remnant.begin(); it != remnant.end(); it++)
+	for (std::vector<int>::iterator it = state.remnant.begin(); it != state.remnant.end(); it++)
 	{
  		std::cout << *it << " ";
  	}
  	std::cout << std::endl;
 
+	vectorGenerateInsertionOrder(state);
+
+	vectorInsertPendingIntoMain(state);
+
+	std::cout << "main after pending insert: ";
+	for (size_t i = 0; i < state.main.size(); i++)
+	{
+ 		std::cout << state.main[i].groupRep << " ";
+ 	}
+ 	std::cout << std::endl;
+
+	if (state.info.hasOddGroup)
+	{
+		state.main.insert(std::upper_bound(state.main.begin(), state.main.end(), state.oddGroup, groupCompare), state.oddGroup);
+		std::cout << "main after odd group insert: ";
+		for (size_t i = 0; i < state.main.size(); i++)
+		{
+			 std::cout << state.main[i].groupRep << " ";
+		 }
+		 std::cout << std::endl;
+	}    
+		
+
+
+	vectorRebuildSequence(state, v);
+
+	std::cout <<"vector v after rebuild: ";
+	for (std::vector<int>::iterator it = v.begin(); it != v.end(); it++)
+	{
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+
+	vectorInsert(v, order / 2);
 }
 
 void	PmergeMe::vectSort()
