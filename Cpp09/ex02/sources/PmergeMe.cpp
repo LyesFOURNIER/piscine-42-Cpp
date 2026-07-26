@@ -170,14 +170,66 @@ void	vectorBuildChains(s_state<std::vector<t_group>, std::vector<int> > &state, 
 
 void	vectorGenerateInsertionOrder(s_state<std::vector<t_group>, std::vector<int> > &state)
 {
-	
+	std::vector<size_t> Jacobsthal;
+
+	if (state.pending.empty())
+		return;
+
+	Jacobsthal.push_back(0);
+	Jacobsthal.push_back(1);
+	Jacobsthal.push_back(1);
+	for (size_t i = 2; Jacobsthal[i] < state.pending.size(); i++)
+	{
+		Jacobsthal.push_back(Jacobsthal[i] + (2 * Jacobsthal[i - 1]));
+	}
+	std::cout << "Jacobsthal sequence = ";
+	for (std::vector<size_t>::iterator it = Jacobsthal.begin(); it != Jacobsthal.end(); it++)
+	{
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
+	state.insertionOrder.push_back(0);
+	// for (size_t i = 0; i < state.pending.size(); i++)
+	// {
+	// 	if (i = 0)
+	// 	else
+	// 	{
+
+	// 	}
+
+	// }
+	for (size_t i = 2; i + 1 < Jacobsthal.size(); i++)
+	{
+		size_t upper = std::min(Jacobsthal[i + 1], state.pending.size());
+		size_t lower = Jacobsthal[i];
+		for (size_t j = upper; j > lower; )
+		{
+			j--;
+			state.insertionOrder.push_back(j);
+		}
+	}
+	std::cout << "insertion order = ";
+	for (std::vector<size_t>::iterator it = state.insertionOrder.begin(); it != state.insertionOrder.end(); it++)
+	{
+		std::cout << *it << " ";
+	}
+	std::cout << std::endl;
 }
 
 void	vectorInsertPendingIntoMain(s_state<std::vector<t_group>, std::vector<int> > &state)
 {
-	for (size_t i = 0; i < state.pending.size(); i++)
+	if (state.insertionOrder.empty())
 	{
-		state.main.insert(std::upper_bound(state.main.begin(), state.main.end(), state.pending[i], groupCompare), state.pending[i]);
+		for (size_t i = 0; i < state.pending.size(); i++)
+			state.main.insert(std::upper_bound(state.main.begin(), state.main.end(), state.pending[i], groupCompare), state.pending[i]);
+	}
+	else
+	{
+		for (size_t i = 0; i < state.insertionOrder.size(); i++)
+		{
+			size_t index = state.insertionOrder[i];
+			state.main.insert(std::upper_bound(state.main.begin(), state.main.end(), state.pending[index], groupCompare), state.pending[index]);
+		}
 	}
 }
 
