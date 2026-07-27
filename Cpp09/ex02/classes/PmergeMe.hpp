@@ -25,9 +25,13 @@ class	PmergeMe
 	~PmergeMe( void );
 
 	void	vectSort();
-	void	dequeSort(std::vector<int>&);
+	void	dequeSort();
+
+	void	FordJohnson();
 
 	private:
 	
-	std::vector<int> _seq;
+	std::vector<int>	_seq;
+	std::vector<int>	_v;
+	std::deque<int>		_d;
 };

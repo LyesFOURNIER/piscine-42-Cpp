@@ -53,9 +53,9 @@ std::string	convertInput(char **input)
 {
 	std::string	ret;
 	
-	for (int i = 1; input[i]; i++)
+	for (size_t i = 1; input[i]; i++)
 	{
-		for (int j = 0; input[i][j]; j++)
+		for (size_t j = 0; input[i][j]; j++)
 		{
 				ret.append(1, input[i][j]);
 		}
@@ -74,16 +74,7 @@ int main(int ac, char **av)
 	if (!isInputValid(av))
 		return 1;
 	PmergeMe seq(convertInput(av));
-	seq.vectSort();
+	seq.FordJohnson();
 	
 	return 0;
 }
-
-
-/*
-note parsing:
-
-- only positive int
-- check for int bounds
-
-*/

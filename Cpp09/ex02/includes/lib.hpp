@@ -15,6 +15,7 @@
 
 # include <iostream>
 # include <algorithm>
+# include <sys/time.h>
 # include "vector"
 # include "deque"
 # include <cstdlib>
