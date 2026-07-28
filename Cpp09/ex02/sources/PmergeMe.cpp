@@ -454,6 +454,7 @@ void	PmergeMe::FordJohnson()
 		std::cout << "no";
 	std::cout << "\nTime to process a range of " << _seq.size() << " elements with std::vector: " << vEnd - vStart << " us";
 	std::cout << "\nTime to process a range of " << _seq.size() << " elements with std::deque: " << dEnd - dStart << " us";
+	std::cout << std::endl;
 }
 
 PmergeMe::~PmergeMe( void )
